@@ -1,5 +1,29 @@
 \documentclass[9pt,fleqn,twoside,twocolumn]{stdglobal}
 
+\fancypagestyle{sectionstyle}{
+  \fancyhf{}
+  \fancyhead[L]{\footnotesize\itshape Seminar (Theoretical Informatics Unplugged) 2021/2022}
+  % \fancyfoot[C]{\footnotesize\bigskip\thepage/\pageref{LastPage}}
+  % \fancyfoot{}
+  \fancyfoot[C]{\footnotesize\bigskip\thepage}
+  \fancyfoot[R]{\footnotesize\bigskip\copyright\ Markus Pawellek, \today}
+  \renewcommand{\footrulewidth}{0.5pt}
+  \renewcommand{\headrulewidth}{0pt}
+}
+
+\fancypagestyle{mainstyle}{
+  \fancyhf{}
+  \fancyfoot[C]{\footnotesize\bigskip\thepage}
+  \fancyfoot[R]{\footnotesize\bigskip\copyright\ Markus Pawellek, \today}
+  % \fancyhead[LO,RE]{\footnotesize \thetitle} %left
+  % \fancyhead[RO,LE]{\footnotesize \theauthor} %right
+  % \fancyhead[LO,RE]{\footnotesize \ \smallskip}
+  \fancyhead[RO]{\footnotesize \@title \smallskip} %right
+  \fancyhead[LE]{\footnotesize \@title \smallskip} %right
+  \renewcommand{\headrulewidth}{0.5pt}
+  \renewcommand{\footrulewidth}{0.5pt}
+}
+
 \usepackage{titlesec}
 \titleformat{\section}{\normalfont\bfseries}{\thesection}{1em}{}
 
@@ -13,6 +37,7 @@
 
 \DeclareMathOperator*{\argmax}{arg\ max}
 \DeclareMathOperator{\val}{val}
+\DeclareMathOperator{\nodein}{in}
 
 \begin{document}
 
@@ -24,9 +49,7 @@
     \Large
     \bfseries
     Probabilistic Circuits: \\
-    Marginal Maximum a Posteriori Queries \\
-    \normalfont
-    Seminar Report
+    Marginal Maximum a Posteriori Queries
   \end{center}%
   \begin{center}
     Markus Pawellek \\
@@ -36,12 +59,10 @@
   \hrule
   \begin{abstract}
     \itshape
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    \noindent
+    Marginal maximum a posteriori (MMAP) queries combine the aspects of both marginal (MAR) and maximum a posteriori (MAP) inference.
+    Introducing marginal determinism, we are able to provide sufficient conditions for a probabilistic circuit (PC) to be tractable for MMAP queries.
+    As a consequence, also the tractable computation of other query types, such as marginal entropy or mutual information, is made possible.
   \end{abstract}
   \hrule
   \vspace{3em}
@@ -49,10 +70,29 @@
 
 
 \section{Introduction}
+  The class of marginal maximum a posteriori (MMAP) queries is more advanced concerning the tractability for probabilistic circuits (PCs).
+  Its computation complexity is highly dependent on the set of query variables and may typically be NP-hard.
+  To reduce complexity, the structural property of marginal determinism is defined.
+  Together with smoothness and decomposability, these are sufficient conditions to make MMAP queries tractable.
+  Nevertheless, it is shown that these properties are indeed not necessary.
+  For the extreme case of the query set, the MMAP query collapses to either a marginal (MAR) or a maximum a posteriori (MAP) query.
+  Resulting from this, a tractable PC for any given query variable set is indeed not expressive and would only allow factorized distributions.
 
 \section{Preliminaries and Review}
-  marginal queries (MAR), maximum a-posteriori queries (MAP)
-  smoothness, consistency, decomposability, determinism
+  Marginal (MAR) queries in the following sense are of paramount importance when we want to reason about state of the world where not all random variables are fully observed.
+  \[
+    p(E=e, Z\in I) = \integral{I}{}{p(z,e)}{Z}
+  \]
+  For a PC, the ability to tractably compute MAR queries is equivalent to its smoothness and decomposability.
+
+  Maximum a posteriori (MAP) queries relate to the mode of the distribution in the following sense.
+  \[
+    \argmax_{q\in\val(Q)} p(q\ |\ e) = \argmax_{q\in\val(Q)} p(q, e)
+  \]
+  The tractable computation of MAP queries in a PC is characterized by the properties consistency and determinism.
+
+  Decomposability implies consistency.
+  As a consequence, we would expect a PC needs to fulfill smoothness, decomposability, and marginal determinism.
 
 \section{Marginal Maximum A-Posteriori Queries}
   \begin{definition*}[(MMAP Query Class)]
@@ -64,14 +104,57 @@
     \]
   \end{definition*}
 
-\section{Algorithm}
-
 \section{Marginal Determinism}
+  Marginal Determinism is a simple generalization of determinism.
+  \begin{definition*}[(Marginal Determinism)]
+    Let $Q\subset X$.
+    A sum node is marginal deterministic with respect to $Q$ if for any partial state $q\in\val(Q)$, the output of at most one of its input units is nonzero.
+    A PC is marginal deterministic with respect to $Q$ if all of its sum nodes containing variables in $Q$ are marginal deterministic.
+  \end{definition*}
+
+  \begin{theorem*}[(MMAP Conditions)]
+    Let $Q\subset X$ and $\mathscr{G}$ be smooth, decomposable, and marginal deterministic with respect to $Q$ PC.
+    Then for any parameterization the sum-maximizer circuit of $\mathscr{G}$ tractably computes MMAP queries over $Q$.
+  \end{theorem*}
+  \begin{proof}
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+    tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+    cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+    proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+  \end{proof}
+
+\section{Algorithm}
+  With respect to the previous algorithms for MAR and MAP queries, only the computation for sum nodes changes.
+  Let $n$ be a sum unit in a feed-forward computation.
+  Then its result $r_n$ can be computed by the following.
+  \[
+    a \define \sum_{c\in\nodein(n)} ϑ_{nc}r_c
+  \]
+  \[
+    b \define \max_{c\in\nodein(n)} ϑ_{nc}r_c
+  \]
+  \[
+    r_n =
+    \begin{cases}
+      a & : φ(n) \cap Q = \emptyset \\
+      b & : \mathrm{else}
+    \end{cases}
+  \]
 
 \section{Application to Marginal Entropy}
+  \begin{theorem*}[(Marginal Entropy Computation)]
+  \end{theorem*}
 
 \section{Expressive Efficiency}
-
+  In contrast to other structural properties, such as decomposability or determinism, marginal determinism is defined with respect to its query set $Q$.
+  For $Q=\emptyset$, it corresponds to smooth and decomposable PCs (tractable for MAR).
+  For $Q=X$, it corresponds to smooth, decomposable, and deterministic PCs (tractable for both MAR and MAP).
+  The latter is more expressive efficient.
+  Other subsets may not be as expressive efficient with respect to either a subset or a superset.
+  Assuming all properties for all possible subsets of $Q$, full-support distributions would have to be fully factorized.
+  This explains the restriction to the query set $Q$.
 \section{Conclusions}
 
 \nocite{*}
