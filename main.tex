@@ -61,9 +61,9 @@
     \itshape
     \noindent
     Marginal maximum a posteriori (MMAP) queries combine the aspects of both marginal (MAR) and maximum a posteriori (MAP) inference.
-    Introducing marginal determinism, we are able to provide sufficient but not necessary conditions for a probabilistic circuit (PC) to be tractable for these queries.
+    Introducing marginal determinism, we are able to provide sufficient conditions for a probabilistic circuit (PC) to be tractable for these queries.
     % By replacing the given PC with its respective sum-maximizer circuit, MMAP queries can be computed with a simple feed-forward traversal.
-    To compute MMAP queries, the algorithms for MAR and MAP queries are merged and adjusted for sum nodes.
+    To handle MMAP queries in this case, the computation of sum units based on the algorithms for MAR and MAP queries is adjusted.
   \end{abstract}
   \hrule
   \vspace{1.5em}
@@ -108,11 +108,11 @@
 
   % As a direct consequence, we see, by setting $\mathbf{Q}=\emptyset$ or $\mathbf{Q}=\mathbf{X}$, that the MMAP query class subsumes both MAR and MAP queries.
   \noindent
-  As a direct consequence, the connection to marginal (MAR) and maximum a posteriori (MAP) queries becomes clear.
+  As a result, the connection to marginal (MAR) and maximum a posteriori (MAP) queries can be seen.
   \[
     \begin{aligned}[t]
       &\mathbf{case}\ Q=\emptyset\ : &\mathscr{Q}_\mathrm{MMAP}(Q) &= \mathscr{Q}_\mathrm{MAR} \\
-      &\mathbf{case}\ Q=X: &\mathscr{Q}_\mathrm{MMAP}(Q) &= \mathscr{Q}_\mathrm{MAP}
+      &\mathbf{case}\ Q=X: &\mathscr{Q}_\mathrm{MMAP}(Q) &\subset \mathscr{Q}_\mathrm{MAP}
     \end{aligned}
   \]
   Now, recapitulate the characterizing properties for a PC to be tractable for those queries.
@@ -153,14 +153,16 @@
 \section{Tractable Computations of MMAP Queries}
   \begin{definition*}[(Marginal Determinism)]
     A sum node $n\in\mathscr{G}$ with inputs $r_c$ for $c\in\nodein(n)$ is $Q$-marginal deterministic if
-    \[
-      \forall q\in\val(Q): \exists! c\in\nodein(n): r_c \neq 0 \ .
-    \]
+    \begin{align*}
+      \forall q\in\val(Q):
+      &\ \forall c\in\nodein(n): r_c = 0 \\
+      &\vee\ \exists! c\in\nodein(n): r_c \neq 0
+    \end{align*}
     % A sum node is marginal deterministic with respect to $\mathbf{Q}$ if for any partial state $\mathbf{q}\in\val(\mathbf{Q})$, the output of at most one of its input units is nonzero.
     If this holds for all sum nodes $n\in\mathscr{G}$ with $φ(n)\cap Q\neq\emptyset$, also $\mathscr{G}$ is called $Q$-marginal deterministic.
     % $\mathscr{G}$ is $Q$-marginal deterministic if all of its sum nodes containing variables of $\mathbf{Q}$ in its scope are $Q$-marginal deterministic.
   \end{definition*}
-
+  \vspace{-0.1em}
   \noindent
   % Because decomposability implies consistency, we will restrict ourselves to smooth and decomposable PCs.
   Marginal determinism is a simple generalization of determinism.
@@ -201,7 +203,7 @@
   \noindent
   Remember from the MAP algorithm, that at the end of the whole algorithm a backward pass is needed to retrieve the modes of the input distributions that contributed to the output.
 
-  \begin{theorem*}[(MMAP Algorithm)]
+  \begin{theorem*}[(Sufficient Conditions)]
     Let $\mathscr{G}$ be smooth, decomposable, and $Q$-marginal deterministic.
     Then for any parameterization $ϑ$ the above algorithm
     % the sum-maximizer circuit of $\mathscr{G}$
@@ -240,13 +242,27 @@
     Applying these equations recursively down to input units, this concludes the proof.
   \end{proof}
 
-\section{Example}
+% \section{Example}
+%   \begin{figure}[H]
+%     \center
+%     \includegraphics[width=0.45\textwidth]{figures/example.pdf}
+%   \end{figure}
+%   \begin{align*}
+%     \mathscr{C}(x_1,x_2)
+%     = &\boxBrackets{ ω_1f_1(x_1) + ω_2f_2(x_1)} \\
+%     &\times \boxBrackets{ ω_3 x_2 + ω_4 (1-x_2) }
+%   \end{align*}
+%   \begin{align*}
+%     &\max_{x_2\in\set{0,1}{}} \integral{}{}{\mathscr{C}(x_1,x_2)}{X_1}
+%     = \max\set{ω_3,ω_4}{} \times \\
+%     &\boxBrackets{ ω_1 \integral{}{}{f_1(x_1)}{X_1} + ω_2 \integral{}{}{f_2(x_1)}{X_1}}
+%   \end{align*}
 
 \section{Conclusions}
   The computation complexity of the set of marginal MMAP queries may typically be NP-hard and is highly dependent on the set of query variables.
   For examining the efficient evaluation of MMAP queries for PCs, the structural property of marginal determinism was defined.
   Together with smoothness and decomposability, these are sufficient conditions to make PCs tractable for MMAP queries.
-  Nevertheless, it was shown that these properties are indeed not necessary.
+  Nevertheless, using the more general structure of sum-maximizer circuits, it can be shown that these properties are indeed not necessary.
   %For the extreme case of the query set, the MMAP query collapses to either a marginal (MAR) or a maximum a posteriori (MAP) query.
   %As a consequence, also the tractable computation of other query types, such as marginal entropy or mutual information, is made possible.
 
