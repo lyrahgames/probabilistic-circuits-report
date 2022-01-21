@@ -225,7 +225,7 @@
       \mathscr{Q}(e,\mathscr{I}) &= \max_{q_1,\ldots,q_k\in\val(Q)} \integral{\mathscr{I}}{}{\prod_{i=1}^k\mathscr{C}_i(Z_i,q_i,e_i)}{Z} \\
       &= \max_{q_1,\ldots,q_k\in\val(Q)} \prod_{i=1}^k \integral{\mathscr{I}}{}{\mathscr{C}_i(Z_i,q_i,e_i)}{Z_i} \\
       &= \prod_{i=1}^k \max_{q_i\in\val(Q)} \integral{\mathscr{I}_i}{}{\mathscr{C}_i(Z_i,q_i,e_i)}{Z_i} \\
-      &= \prod_{i=1}^k \mathscr{C}_i(e_i,\mathscr{I}_i)
+      &= \prod_{i=1}^k \mathscr{Q}_i(e_i,\mathscr{I}_i)
     \end{align*}
 
     Sum units, whose scope contains no query variable, only compute MAR queries.
